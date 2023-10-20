@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Authorization Callback</title>
+</head>
+<body>
+    <h1>Authorization Callback Page</h1>
+
+    <script>
+        // Parse URL parameters to extract authorization code
+        const urlParams = new URLSearchParams(window.location.search);
+        const authCode = urlParams.get('code');
+
+        // Display the authorization code on the page
+        const authCodeElement = document.createElement('p');
+        authCodeElement.textContent = `Authorization Code: ${authCode}`;
+        document.body.appendChild(authCodeElement);
+    </script>
+</body>
+</html>
+
