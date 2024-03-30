@@ -1,30 +1,30 @@
 from flask import Flask, redirect, url_for, request
-import os
-from dotenv import load_dotenv
+from main import checkMemoryCache
 
-load_dotenv()
 
 app = Flask(__name__)
 
+ENV_TESLA_API_TOKEN, REDIRECT_URI, CLIENT_ID, STATE = checkMemoryCache()
+
+
+
 # Endpoint for initiating the authorization process
-@app.route("/")
-def start_auth():
+@app.route("/start_auth", methods=["GET"])
+def start_auth(CLIENT_ID=CLIENT_ID,REDIRECT_URI=REDIRECT_URI,STATE=STATE):#,AUTH_URL):
     # Base URL for the authorization endpoint
     auth_endpoint = "https://auth.tesla.com/oauth2/v3/authorize"
 
     # Client ID provided by Tesla
-    client_id = os.getenv("CLIENT_ID")
-    client_secret = os.getenv("CLIENT_SECRET")
-    audience = os.getenv("AUDIENCE")
+    client_id = CLIENT_ID
 
     # Redirect URI registered with Tesla
-    redirect_uri = "https://your_redirect_uri.com/callback"
+    redirect_uri = REDIRECT_URI
 
     # Scopes requested by the client application
     scopes = "openid vehicle_device_data offline_access"
 
     # State parameter (optional, used for CSRF protection)
-    state = "CA"
+    state = STATE
 
     # Construct the authorization URL with required parameters
     auth_url = f"{auth_endpoint}?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code&scope={scopes}&state={state}"
@@ -37,7 +37,7 @@ def start_auth():
 def callback():
     # Retrieve the authorization code from the callback URL
     code = request.args.get("code")
-
+    print(code)
     # Process the authorization code (e.g., exchange it for an access token)
     # Your code to handle the authorization code goes here
 
